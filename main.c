@@ -16,9 +16,7 @@
 #include "lv_drivers/indev/mouse.h"
 #include "lv_drivers/indev/mousewheel.h"
 #include "lv_drivers/indev/keyboard.h"
-#include "lv_examples/lv_apps/demo/demo.h"
-#include "lv_examples/lv_apps/benchmark/benchmark.h"
-#include "lv_examples/lv_tests/lv_test.h"
+#include "hmi.h"
 
 /*********************
  *      DEFINES
@@ -66,17 +64,7 @@ int main(int argc, char ** argv)
     /*Initialize the HAL (display, input devices, tick) for LittlevGL*/
     hal_init();
 
-    /*Load a demo*/
-    demo_create();
-
-    /*Try the benchmark to see how fast your GUI is*/
-//    benchmark_create();
-
-    /*Check the themes too*/
-//    lv_test_theme_1(lv_theme_night_init(15, NULL));
-
-    /* A keyboard and encoder (mouse wheel) control example*/
-//    lv_test_group_1();
+    hmi_init(lv_theme_material_init(0, NULL));
 
     while(1) {
         /* Periodically call the lv_task handler.

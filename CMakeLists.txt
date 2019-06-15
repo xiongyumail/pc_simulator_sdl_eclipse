@@ -3,16 +3,13 @@ project(lvgl)
 set(CMAKE_C_STANDARD 11)#C11
 set(CMAKE_CXX_STANDARD 17)#C17
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(EXECUTABLE_OUTPUT_PATH bin) 
 
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR})
+file(GLOB_RECURSE SOURCES  "lv_drivers/*.c" "lvgl/*.c" )
 
-file(GLOB_RECURSE INCLUDES "lv_drivers/*.h" "lv_examples/*.h"  "lvgl/*.h"  "./*.h" )
-file(GLOB_RECURSE SOURCES  "lv_drivers/*.c" "lv_examples/*.c"  "lvgl/*.c" )
-
-SET(EXECUTABLE_OUTPUT_PATH bin) 
-
+add_definitions(-DLV_CONF_INCLUDE_SIMPLE)
 find_package(SDL2 REQUIRED SDL2)
-include_directories(${SDL2_INCLUDE_DIRS})
-add_executable(main main.c mouse_cursor_icon.c ${SOURCES} ${INCLUDES})
-target_link_libraries(main PRIVATE SDL2 )
+include_directories(${SDL2_INCLUDE_DIRS} ${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/lvgl)
+add_executable(main main.c hmi.c mouse_cursor_icon.c ${SOURCES})
+target_link_libraries(main PRIVATE SDL2)
 add_custom_target (run COMMAND ${EXECUTABLE_OUTPUT_PATH}/main)

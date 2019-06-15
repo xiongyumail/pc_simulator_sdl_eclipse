@@ -6,3 +6,4 @@ demo
 .pydevproject
 /.metadata/
 build
+.vscode
