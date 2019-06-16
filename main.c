@@ -9,6 +9,7 @@
  *********************/
 #include <stdlib.h>
 #include <unistd.h>
+#include <time.h>
 #define SDL_MAIN_HANDLED        /*To fix SDL's "undefined reference to WinMain" issue*/
 #include <SDL2/SDL.h>
 #include "lvgl/lvgl.h"
@@ -16,7 +17,7 @@
 #include "lv_drivers/indev/mouse.h"
 #include "lv_drivers/indev/mousewheel.h"
 #include "lv_drivers/indev/keyboard.h"
-#include "hmi.h"
+#include "gui.h"
 
 /*********************
  *      DEFINES
@@ -58,13 +59,16 @@ int main(int argc, char ** argv)
     (void) argc;    /*Unused*/
     (void) argv;    /*Unused*/
 
+    setenv("TZ", "CST-8", 1);
+    tzset();
+
     /*Initialize LittlevGL*/
     lv_init();
 
     /*Initialize the HAL (display, input devices, tick) for LittlevGL*/
     hal_init();
 
-    hmi_init(lv_theme_material_init(0, NULL));
+    gui_init(lv_theme_material_init(0, NULL));
 
     while(1) {
         /* Periodically call the lv_task handler.
