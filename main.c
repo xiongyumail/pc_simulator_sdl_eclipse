@@ -54,6 +54,22 @@ static void memory_monitor(void * param);
  *   GLOBAL FUNCTIONS
  **********************/
 
+int font_generate_bin(const char *filename, const lv_font_t *font)
+{
+    int ret;
+    size_t size;
+
+    size = font->glyph_dsc[font->glyph_cnt - 1].glyph_index + font->glyph_dsc[font->glyph_cnt - 1].w_px * font->h_px;
+
+    FILE *fp=fopen(filename, "w");
+    if (fp == NULL) {
+        return -1;
+    }
+    ret = fwrite(font->glyph_bitmap, size, 1, fp);
+    fclose(fp);
+    return ret * size;
+}
+
 int main(int argc, char ** argv)
 {
     (void) argc;    /*Unused*/
@@ -69,6 +85,9 @@ int main(int argc, char ** argv)
     hal_init();
 
     gui_init(lv_theme_material_init(0, NULL));
+
+    LV_FONT_DECLARE(seg_font);
+    printf("seg_font.bin generate: %d\n", font_generate_bin("seg_font.bin", &seg_font));
 
     while(1) {
         /* Periodically call the lv_task handler.
