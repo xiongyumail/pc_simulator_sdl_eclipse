@@ -76,6 +76,35 @@ static void header_create(void)
     lv_obj_set_pos(header, 0, 0);
 }
 
+static void side_create(void)
+{
+    lv_obj_t * h = lv_cont_create(lv_scr_act(), NULL);
+
+    static lv_style_t style_txt;
+    lv_style_copy(&style_txt, &lv_style_plain);
+    LV_FONT_DECLARE(seg_font);
+    style_txt.text.font = &seg_font;
+    style_txt.text.opa = LV_OPA_100;
+
+    lv_obj_t * lable;
+    lable = lv_label_create(h, NULL);
+    lv_obj_set_style(lable, &style_txt);
+    lv_label_set_text(lable, "V");
+
+    lable = lv_label_create(h, NULL);
+    lv_obj_set_style(lable, &style_txt);
+    lv_label_set_text(lable, "A");
+
+    lable = lv_label_create(h, NULL);
+    lv_obj_set_style(lable, &style_txt);
+    lv_label_set_text(lable, "W");
+
+    lv_cont_set_layout(h, LV_LAYOUT_CENTER);
+    lv_obj_set_pos(h, LV_HOR_RES - (LV_HOR_RES / 4) * 1, lv_obj_get_height(header));
+    lv_obj_set_width(h, (LV_HOR_RES / 4) * 1);
+    lv_obj_set_height(h, LV_VER_RES - lv_obj_get_height(header));
+}
+
 static void body_create(void)
 {
     body = lv_cont_create(lv_scr_act(), NULL);
@@ -106,25 +135,6 @@ static void body_create(void)
     lv_obj_set_pos(body, 0, lv_obj_get_height(header));
     lv_obj_set_width(body, (LV_HOR_RES / 4) * 3);
     lv_obj_set_height(body, LV_VER_RES - lv_obj_get_height(header));
-
-    lv_obj_t * h = lv_cont_create(lv_scr_act(), body);
-
-    lv_obj_t * lable;
-    lable = lv_label_create(h, NULL);
-    lv_obj_set_style(lable, &style_txt);
-    lv_label_set_text(lable, "V");
-
-    lable = lv_label_create(h, NULL);
-    lv_obj_set_style(lable, &style_txt);
-    lv_label_set_text(lable, "A");
-
-    lable = lv_label_create(h, NULL);
-    lv_obj_set_style(lable, &style_txt);
-    lv_label_set_text(lable, "W");
-
-    lv_cont_set_layout(h, LV_LAYOUT_CENTER);
-    lv_obj_set_pos(h, LV_HOR_RES - (LV_HOR_RES / 4) * 1, lv_obj_get_height(header));
-    lv_obj_set_width(h, (LV_HOR_RES / 4) * 1);
 }
 
 void gui_init(lv_theme_t * th)
@@ -136,6 +146,7 @@ void gui_init(lv_theme_t * th)
     lv_cont_set_style(scr, th->bg);
 
     header_create();
+    side_create();
     body_create();
     source[0].val = 5.26;
     source[0].mask = 1;
