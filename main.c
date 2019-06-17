@@ -65,9 +65,9 @@ int font_generate_bin(const char *filename, const lv_font_t *font)
     if (fp == NULL) {
         return -1;
     }
-    ret = fwrite(font->glyph_bitmap, size, 1, fp);
+    ret = fwrite(font->glyph_bitmap, sizeof(uint8_t), size, fp);
     fclose(fp);
-    return ret * size;
+    return ret;
 }
 
 int main(int argc, char ** argv)
