@@ -5,3 +5,5 @@ lv_dev_tools/
 demo
 .pydevproject
 /.metadata/
+build
+.vscode

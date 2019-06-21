@@ -58,6 +58,7 @@ static lv_disp_t  * disp2;
  *   GLOBAL FUNCTIONS
  **********************/
 
+#include "gui.h"
 
 int main(int argc, char ** argv)
 {
@@ -66,6 +67,9 @@ int main(int argc, char ** argv)
 
     (void) argc;    /*Unused*/
     (void) argv;    /*Unused*/
+
+    setenv("TZ", "CST-8", 1);
+    tzset();
 
     /*Initialize LittlevGL*/
     lv_init();
@@ -77,7 +81,8 @@ int main(int argc, char ** argv)
     lv_disp_set_default(disp1);
 
     /*Select display 1*/
-    demo_create();
+    // demo_create();
+    gui_init(lv_theme_material_init(0, NULL));
 
     /*Try the benchmark to see how fast your GUI is*/
 //    benchmark_create();
@@ -88,11 +93,12 @@ int main(int argc, char ** argv)
     /* Stress test */
 //    lv_test_stress_1();
 
-    /*Select display 2*/
-    lv_disp_set_default(disp2);
+    // /*Select display 2*/
+    // lv_disp_set_default(disp2);
 
-    /* A keyboard and encoder (mouse wheel) control example*/
-    lv_test_group_1();
+    // /* A keyboard and encoder (mouse wheel) control example*/
+    // // lv_test_group_1();
+    // benchmark_create();
 
     while(1) {
         /* Periodically call the lv_task handler.
@@ -136,8 +142,8 @@ static void hal_init(void)
 
     /*Create a display buffer*/
     static lv_disp_buf_t disp_buf1;
-    static lv_color_t buf1_1[480*400];
-    lv_disp_buf_init(&disp_buf1, buf1_1, NULL, 480*400);
+    static lv_color_t buf1_1[LV_HOR_RES_MAX*(LV_VER_RES_MAX + 100)];
+    lv_disp_buf_init(&disp_buf1, buf1_1, NULL, LV_HOR_RES_MAX*LV_VER_RES_MAX);
 
     /*Create a display*/
     lv_disp_drv_t disp_drv;
@@ -146,17 +152,17 @@ static void hal_init(void)
     disp_drv.flush_cb = monitor_flush;    /*Used when `LV_VDB_SIZE != 0` in lv_conf.h (buffered drawing)*/
     disp1 = lv_disp_drv_register(&disp_drv);
 
-    /*Create an other buffer for double buffering*/
-    static lv_disp_buf_t disp_buf2;
-    static lv_color_t buf2_1[480*10];
-    static lv_color_t buf2_2[480*10];
-    lv_disp_buf_init(&disp_buf2, buf2_1, buf2_2, 480*10);
+    // /*Create an other buffer for double buffering*/
+    // static lv_disp_buf_t disp_buf2;
+    // static lv_color_t buf2_1[LV_HOR_RES_MAX*LV_VER_RES_MAX / 10];
+    // static lv_color_t buf2_2[LV_HOR_RES_MAX*LV_VER_RES_MAX / 10];
+    // lv_disp_buf_init(&disp_buf2, buf2_1, buf2_2, LV_HOR_RES_MAX*LV_VER_RES_MAX / 10);
 
-    /*Create an other display*/
-    lv_disp_drv_init(&disp_drv);            /*Basic initialization*/
-    disp_drv.buffer = &disp_buf2;
-    disp_drv.flush_cb = monitor_flush2;    /*Used when `LV_VDB_SIZE != 0` in lv_conf.h (buffered drawing)*/
-    disp2 = lv_disp_drv_register(&disp_drv);
+    // /*Create an other display*/
+    // lv_disp_drv_init(&disp_drv);            /*Basic initialization*/
+    // disp_drv.buffer = &disp_buf2;
+    // disp_drv.flush_cb = monitor_flush2;    /*Used when `LV_VDB_SIZE != 0` in lv_conf.h (buffered drawing)*/
+    // disp2 = lv_disp_drv_register(&disp_drv);
 
     /* Add the mouse as input device
      * Use the 'mouse' driver which reads the PC's mouse*/
@@ -180,7 +186,7 @@ static void hal_init(void)
 
     /* Optional:
      * Create a memory monitor task which prints the memory usage in periodically.*/
-    lv_task_create(memory_monitor, 3000, LV_TASK_PRIO_MID, NULL);
+    lv_task_create(memory_monitor, 1000, LV_TASK_PRIO_MID, NULL);
 }
 
 /**
@@ -206,7 +212,7 @@ static int tick_thread(void * data)
  */
 static void memory_monitor(lv_task_t * param)
 {
-    return;
+    // return;
     (void) param; /*Unused*/
 
     lv_mem_monitor_t mon;
